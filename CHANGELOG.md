@@ -95,6 +95,7 @@ Whitespace conventions:
 - Allow passing number of months to `Date#next_month` and `Date#prev_month`. (#1757)
 - Fixed `pattern` argument handling for `Enumerable#grep` and `Enumerable#grep_v`. (#1757)
 - Raise `ArgumentError` instead of `TypeError` from `Numeric#step` when step is not a number. (#1757)
+- `LoadError` wasn't being raised at run time except by `Opal::Builder` (in a hackish way). Now `dynamic_require_severity` and `Opal.config.missing_require_severity;` are correctly respected and if the latter is set to `error` a `LoadError` will be raised by `Opal.require()`
 
 
 ## [0.11.0] - 2017-12-08

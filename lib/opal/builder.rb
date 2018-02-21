@@ -83,6 +83,7 @@ module Opal
     end
 
     def build_str(source, filename, options = {})
+      return if source.nil?
       path = path_from_filename(filename)
       asset = processor_for(source, filename, path, options)
       requires = preload + asset.requires + tree_requires(asset, path)
@@ -176,10 +177,11 @@ module Opal
         case compiler_options[:dynamic_require_severity]
         when :raise   then raise MissingRequire, message
         when :warning then warn message
-        else # noop
+        else # noop (:ignore, :load_error)
         end
 
-        return "raise LoadError, #{message.inspect}"
+        # return "raise LoadError, #{message.inspect}"
+        nil
       end
     end
 
@@ -194,8 +196,9 @@ module Opal
       if source.nil?
         message = "can't find file: #{filename.inspect}"
         case @compiler_options[:dynamic_require_severity]
-        when :error then raise LoadError, message
+        when :error   then raise LoadError, message
         when :warning then warn "can't find file: #{filename.inspect}"
+        else return
         end
       end
 
